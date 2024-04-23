@@ -1,14 +1,15 @@
 #include <POP32.h> 
 
-#define baseSpd 30
+#define baseSpd 20
 #define kp 10
 #define ki 0
 #define kd 0
 //Values 
-int sensorValues[5] ;
+int sensorValues[5];
 int threshold[5] = {1425,1970,2125,2150,1400};
 short sensorsIsBlack[5];
 int lSpd,rSpd = baseSpd;
+int speedchang = 30; //my father chang this.
 //config 
 //PID
 int P,I,D,prevP,PID_value = 0 ;
@@ -46,9 +47,9 @@ void cross(){
     
     prevP = P ;
     PID_value = (kp * P) + (kd * (P-prevP)); //in this case we dont use ki term , may be add in future
-    PID_value = constrain(PID_value, -100, 100);
-    lSpd = constrain(baseSpd + PID_value ,-100,100);
-    rSpd = constrain(baseSpd - PID_value ,-100,100);
+    PID_value = constrain(PID_value, -speedchang, speedchang);
+    lSpd = constrain(baseSpd + PID_value ,-speedchang,speedchang);
+    rSpd = constrain(baseSpd - PID_value ,-speedchang,speedchang);
 
     motor(1,lSpd);
     motor(2,rSpd);
@@ -82,7 +83,7 @@ void lineTrac (){
 
   prevP = P ;
   PID_value = (kp * P) + (kd * (P-prevP)); //in this case we dont use ki term , may be add in future
-  PID_value = constrain(PID_value, 0, 100-baseSpd);
+  PID_value = constrain(PID_value, 0, speedchang-baseSpd);
   lSpd = baseSpd + PID_value ;
   rSpd = baseSpd - PID_value ;
 
